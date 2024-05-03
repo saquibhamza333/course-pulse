@@ -10,6 +10,7 @@ import {CategoryForm }from "./_components/CategoryForm";
 import PriceForm from "./_components/PriceForm";
 import { AttachmentForm } from "./_components/AttachmentForm";
 import ChaptersForm from "./_components/ChaptersForm";
+import { Actions } from "./_components/Actions";
 
 
 
@@ -49,7 +50,7 @@ const categories = await db.category.findMany({
     return redirect("/");
   }
 
-  const requireFields =[
+  const requiredFields =[
     course.title,
     course.description,
     course.imageUrl,
@@ -58,9 +59,10 @@ const categories = await db.category.findMany({
     course.chapters.some(chapter=>chapter.isPublished)
   ]
 
-  const totalFields = requireFields.length;
-  const completedFields = requireFields.filter(Boolean).length;
+  const totalFields = requiredFields.length;
+  const completedFields = requiredFields.filter(Boolean).length;
   const completionText = `(${completedFields}/${totalFields})`
+   const isComplete = requiredFields.every(Boolean);
 
   return (
     <div className="p-6">
@@ -74,6 +76,11 @@ const categories = await db.category.findMany({
                 </span>
 
             </div>
+              <Actions
+            disabled={!isComplete}
+            courseId={params.courseId}
+            isPublished={course.isPublished}
+          />
 
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">

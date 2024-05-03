@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 // prisma/schema.prisma
@@ -17,6 +18,23 @@ datasource db {
   // directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
+enum MemberRole {
+  ADMIN
+  TEACHER
+  STUDENT
+}
+
+model Profile {
+  id String @id @default(uuid())
+  userId String @unique
+  name String
+  imageUrl String?  
+  email String  
+
+  role MemberRole @default(STUDENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 model Course {
   id String @id @default(uuid())
   userId String
@@ -39,6 +57,7 @@ model Course {
   updatedAt DateTime @updatedAt
 
   @@index([categoryId])
+
 
 }
 
@@ -133,4 +152,16 @@ model StripeCustomer {
 
   createdAt         DateTime   @default(now())
   updatedAt         DateTime   @updatedAt
+}
+
+
+model Logging {
+  id        String   @id @default(uuid())
+  url       String
+  method    String
+  body      String?
+  response  String?
+  statusCode Int?
+  errorMessage String?
+  createdAt DateTime @default(now())
 }

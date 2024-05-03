@@ -32,5 +32,3 @@ const course = await db.course.update({
     }
 
 }
-
-
